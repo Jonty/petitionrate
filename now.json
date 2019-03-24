@@ -2,5 +2,6 @@
   "version": 2,
   "builds": [
     { "src": "*.py", "use": "@liudonghua123/now-flask", "config": { "maxLambdaSize": "50mb" }}
-  ]
+  ],
+  "alias": "predictition.jonty.now.sh"
 }
