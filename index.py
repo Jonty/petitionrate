@@ -21,6 +21,7 @@ def index():
 
     agg = defaultdict(lambda: defaultdict(list))
 
+    now = None
     prev = None
     for row in lines:
         datestr, count = row.split(",")
@@ -35,10 +36,10 @@ def index():
         signatures = count - prev[1]
 
         agg[(date.month, date.day)][date.hour].append(signatures / elapsed)
+        now = datetime(year=date.year, month=date.month, day=date.day, hour=date.hour)
 
         prev = (date, count)
 
-    now = datetime.now()
 
     sps_history = {}
     prev_rate = None
