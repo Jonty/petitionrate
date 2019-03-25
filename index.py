@@ -70,7 +70,7 @@ def index():
     delta_pct = sum(deltas) / len(deltas)
 
     current = int(highest_count)
-    target = round(current, -6) + 1000000
+    target = (math.floor(current / 1000000) + 1) * 1000000
 
     future_hours = 0
     one_day_ago = datetime(
