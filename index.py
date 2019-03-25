@@ -8,10 +8,13 @@ from flask import Flask
 from flask import Markup
 from flask import Flask
 from flask import render_template
+
 app = Flask(__name__)
+
 
 @app.route("/")
 def index():
+
     req = requests.get("https://odileeds.org/projects/petitions/241584.csv")
     data = req.content.decode("ascii")
     lines = data.splitlines()
@@ -40,7 +43,6 @@ def index():
 
         prev = (date, count)
 
-
     sps_history = {}
     prev_rate = None
     for date, hours in agg.items():
@@ -56,7 +58,6 @@ def index():
                 dt = datetime(year=now.year, month=date[0], day=date[1], hour=hour)
                 if dt <= now:
                     sps_history[dt] = rate
-
 
     deltas = []
     for offset in range(0, 24):
@@ -77,16 +78,21 @@ def index():
     ) - timedelta(days=1)
     prev_td = one_day_ago
 
+    decayed_delta_pct = delta_pct
+
     while current < target:
         future_hours += 1
         prev_td += timedelta(hours=1)
 
-        predict = sps_history[prev_td] * delta_pct
+        predict = sps_history[prev_td] * decayed_delta_pct
         predict_increase = predict * 60 * 60
         current += predict_increase
 
         if prev_td >= now:
             prev_td = one_day_ago
+
+        if future_hours % 24 == 0:
+            decayed_delta_pct = decayed_delta_pct * delta_pct
 
         if current >= target:
             break
@@ -97,8 +103,11 @@ def index():
     print("%s votes at %s" % (target, future_td))
 
     labels = sps_history.keys()
-    values = [ int(v*60*60) for v in sps_history.values() ]
-    return render_template('index.html', values=values, labels=labels, target=target, countdown=future_td)
+    values = [int(v * 60 * 60) for v in sps_history.values()]
+    return render_template(
+        "index.html", values=values, labels=labels, target=target, countdown=future_td
+    )
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0")
