@@ -72,18 +72,24 @@ def index():
     target = round(current, -6) + 1000000
 
     future_hours = 0
-    while current < target:
-        for offset in range(0, 24):
-            future_hours += 1
-            prev_td = datetime(
-                year=now.year, month=now.month, day=now.day, hour=now.hour
-            ) - timedelta(hours=offset)
-            predict = sps_history[prev_td] * delta_pct
-            predict_increase = predict * 60 * 60
-            current += predict_increase
+    one_day_ago = datetime(
+        year=now.year, month=now.month, day=now.day, hour=now.hour
+    ) - timedelta(days=1)
+    prev_td = one_day_ago
 
-            if current >= target:
-                break
+    while current < target:
+        future_hours += 1
+        prev_td += timedelta(hours=1)
+
+        predict = sps_history[prev_td] * delta_pct
+        predict_increase = predict * 60 * 60
+        current += predict_increase
+
+        if prev_td >= now:
+            prev_td = one_day_ago
+
+        if current >= target:
+            break
 
     future_td = datetime(
         year=now.year, month=now.month, day=now.day, hour=now.hour
