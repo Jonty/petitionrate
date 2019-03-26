@@ -93,6 +93,8 @@ def index():
 
         if future_hours % 24 == 0:
             decayed_delta_pct = decayed_delta_pct * delta_pct
+            if decayed_delta_pct < 0.001:
+                decayed_delta_pct = 0.001
 
         if current >= target:
             break
@@ -105,7 +107,7 @@ def index():
     labels = sps_history.keys()
     values = [int(v * 60 * 60) for v in sps_history.values()]
     return render_template(
-        "index.html", values=values, labels=labels, target=target, countdown=future_td
+        "index.html", values=values, labels=labels, target=target, countdown=future_td, hours=future_hours
     )
 
 
