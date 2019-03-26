@@ -37,7 +37,7 @@
    <br><br>
     <center>
        <small>A rough prediction: The <a href="https://petition.parliament.uk/petitions/241584">The Article 50 revocation petition</a> will hit</small>
-       <h2>{{target/1000000}} million signatures at <a title="{{countdown}} GMT">{{countdown.strftime('%-I %p')}} on {{countdown.strftime('%A')}}</a></h2>
+       <h2>{{target/1000000}} million signatures {% if hours < 150 %}at <a title="{{countdown}} GMT">{{countdown.strftime('%-I %p')}} on {{countdown.strftime('%A')}}{% else %}on {{countdown.strftime('%A %-d %B %Y')}}{% endif %}</a></h2>
        <small>based on the last 48hrs of <a href="https://odileeds.org/projects/petitions/241584">data from ODI Leeds</a></smal>
     <br><br>
 	<div style="width:75%;">

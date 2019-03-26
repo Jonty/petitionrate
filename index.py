@@ -60,7 +60,7 @@ def index():
                     sps_history[dt] = rate
 
     deltas = []
-    for offset in range(0, 24):
+    for offset in range(0, 48):
         now_td = datetime(
             year=now.year, month=now.month, day=now.day, hour=now.hour
         ) - timedelta(hours=offset)
